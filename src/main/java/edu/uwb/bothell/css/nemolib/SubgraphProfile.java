@@ -40,8 +40,7 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		if(nodeFreqMap == null) {
 			nodeFreqMap = new HashMap<>();
 		}
-		for (int i = 0; i < vertices.length; i++)
-		{
+		for (int i = 0; i < vertices.length; i++) {
 			int currentNode = currentSubgraph.get(i);
 			int currentFreq = 0;
 			if (nodeFreqMap.containsKey(currentNode)) {
