@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 /**
  * SubgraphEnumerators detect all instances of subgraphs of a particular size

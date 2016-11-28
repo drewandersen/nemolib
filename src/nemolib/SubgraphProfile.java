@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -58,10 +58,10 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 
 	// uses interface JavaDoc comment
 	@Override
-	public void label()
+	public void label(String labelGPath)
 	{
 		// get the canonical labels, which should be ordered.
-		Labeler labeler = new Labeler();
+		Labeler labeler = new Labeler(labelGPath);
 		Map<String, String> g6CanLabelMap =
 				labeler.getCanonicalLabels(labelVertexFreqMapMap.keySet());
 

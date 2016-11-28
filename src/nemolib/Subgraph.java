@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
@@ -43,7 +43,7 @@ public class Subgraph {
 
     boolean contains(int node) {
         for (int i = 0; i < size(); i++) {
-            if (get(i) == node) {
+            if (nodes[i] == node) {
                 return true;
             }
         }

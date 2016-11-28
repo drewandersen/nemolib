@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +16,6 @@ public class RandESU
 	{
 		throw new AssertionError();
 	}
-
-	/**
-	 * Construct a RandESU object
-	 * @param probs a list with the index of each member of the list
-	 *              corresponding to a level in the ESU tree, and the value
-	 *              representing the probability of continuing to execute the
-	 *              ESU algorithm down that branch.
-	 */
-/*	RandESU(List<Double> probs)
-	{
-		this.probs = probs;
-		rand = new Random();
-	}
-*/
 
 	/**
 	 * Enumerates all subgraphSize Subgraphs in the input Graph using the 
@@ -83,11 +69,9 @@ public class RandESU
 		AdjacencyList adjacencyList = new AdjacencyList();
 		CompactHashSet.Iter iter =
 				graph.getAdjacencyList(vertex).iterator();
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			int next = iter.next();
-			if (next > vertex)
-			{
+			if (next > vertex) {
 				adjacencyList.add(next);
 			}
 		}
@@ -99,13 +83,14 @@ public class RandESU
 			extend(graph, subgraph, adjacencyList, probs, subgraphs);
 		}
 	}
+
 	// extend the subgraphs recursively
 	private static void extend(Graph graph,
 	                    Subgraph subgraph,
 	                    AdjacencyList extension,
 						List<Double> probs,
-	                    SubgraphEnumerationResult subgraphs)
-	{
+	                    SubgraphEnumerationResult subgraphs) {
+
 		int v = subgraph.root();
 		CompactHashSet.Iter wIter = extension.iterator();
 
@@ -119,7 +104,9 @@ public class RandESU
 					// construct a union of w and the existing subgraph
 					Subgraph subgraphUnion = subgraph.copy();
 					subgraphUnion.add(w, graph.getAdjacencyList(w));
-					subgraphs.add(subgraphUnion);
+					synchronized(subgraphs) {
+						subgraphs.add(subgraphUnion);
+					}
 				}
 			}
 		}

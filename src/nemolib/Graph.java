@@ -1,7 +1,7 @@
 // TODO retain mapping of nodeID to nodeName from input file
 // TODO make a GraphParser class to take the complexity out of this class
 
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,12 +12,21 @@ import java.util.*;
 public class Graph implements Serializable {
 	private List<AdjacencyList> adjacencyLists;
 
+	/**
+	 * Construct a graph object from a file. The file must contain two nodes 
+	 * on each line representing an edge.
+	 *
+	 * @filename the name of the file from which to construct the graph.
+	 */
     public Graph(String filename) throws IOException
     {
         adjacencyLists = new ArrayList<>();
         parse(filename);
     }
 
+	/**
+	 * Construct a Graph object.
+	 */
     public Graph()
     {
         adjacencyLists = new ArrayList<>();
@@ -127,6 +136,7 @@ public class Graph implements Serializable {
 	    return sb.toString();
     }
 
+	// Represents edges for a Graph
     private class Edge {
 		int nodeA;
 		int nodeB;

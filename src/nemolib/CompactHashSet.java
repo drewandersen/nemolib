@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.io.Serializable;
 import java.lang.IllegalStateException;
@@ -13,11 +13,11 @@ class CompactHashSet implements Serializable{
     private int[][] table;
     private int size;
 
-    public CompactHashSet() {
+    CompactHashSet() {
         this(DEFAULT_CAPACITY);
     }
 
-    public CompactHashSet(int tableSize) {
+    CompactHashSet(int tableSize) {
         if (tableSize < 0) {
             throw new IllegalArgumentException(
                 "Argument out of range (must be non-negative).");
@@ -30,7 +30,7 @@ class CompactHashSet implements Serializable{
         }
     }
 
-    public CompactHashSet copy() {
+    CompactHashSet copy() {
         CompactHashSet copy = new CompactHashSet(table.length);
         Iter iter = iterator();
         while (iter.hasNext()) {
@@ -39,15 +39,15 @@ class CompactHashSet implements Serializable{
         return copy;
     }
 
-    public int size() {
+    int size() {
         return size;
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return size() == 0;
     }
 
-    public void add(int element) {
+    void add(int element) {
         if (element < 0) {
             throw new IllegalArgumentException(
                 "Argument out of range (must be non-negative).");
@@ -91,7 +91,7 @@ class CompactHashSet implements Serializable{
         size++;
     }
 
-    public boolean contains(int element) {
+    boolean contains(int element) {
         if (element < 0) {
             return false;
         }
@@ -109,7 +109,7 @@ class CompactHashSet implements Serializable{
         }
     }
 
-    public boolean remove(int element) {
+    boolean remove(int element) {
         if (element < 0) {
             return false;
         }
@@ -148,7 +148,7 @@ class CompactHashSet implements Serializable{
         return element;
     }
 
-    public Iter iterator() {
+    Iter iterator() {
         return new Iter(this);
     }
 
@@ -163,7 +163,7 @@ class CompactHashSet implements Serializable{
         return s;
     }
 
-    public static class Iter {
+    static class Iter {
 
         private CompactHashSet set;
         private int row;

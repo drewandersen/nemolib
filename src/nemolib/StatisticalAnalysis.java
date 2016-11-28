@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

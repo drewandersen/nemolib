@@ -1,7 +1,10 @@
-package edu.uwb.bothell.css.nemolib;
-
+package nemolib;
 import java.io.Serializable;
 
+/**
+ * AdjacencyList represents all adjacent vertices for a particular vertex in a
+ * network graph.
+ */
 class AdjacencyList implements Serializable{
 
     private CompactHashSet nodes;

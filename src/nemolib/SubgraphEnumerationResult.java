@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.util.Map;
 
@@ -20,8 +20,9 @@ public interface SubgraphEnumerationResult
 	/**
 	 * Merges g6 labels into SubgraphProfile labels. Highly recommended to use 
 	 * the Labeler class to accomplish this.
+	 * @param labelGPath the absolute path to the labelg binar
 	 */
-	void label();
+	void label(String labelGPath);
 
 	/**
 	 * Calculates and returns a map of relative frequencies or concentrations

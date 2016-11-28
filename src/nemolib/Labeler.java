@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.io.*;
 import java.util.*;
@@ -9,7 +9,7 @@ public final class Labeler {
 	static int instanceCounter = 0;
 	
     // labelg program options
-    private static final String programName = "./resources/labelg";
+    private static String labelGPath = "labelg"
     private static final int invariant = 3;
     private static final int mininvarlevel = 1;
     private static final int maxinvarlevel = 100;
@@ -30,12 +30,18 @@ public final class Labeler {
         this.outputFilename = filePrefix + "canonical_" +
                               currentTime + filePostfix + instanceCounter;
         this.args = getArgs();
+		
 		instanceCounter++;
+    }
+
+    public Labeler(String labelGPath) {
+		this.labelGPath = labelGPath;
+		Labeler();
     }
 
     private String[] getArgs() {
         String[] args = {
-            programName,
+            labelGPath,
             "-i" + invariant,
             "-I" + mininvarlevel + ":" + maxinvarlevel,
             inputFilename,

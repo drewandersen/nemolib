@@ -1,4 +1,4 @@
-package edu.uwb.bothell.css.nemolib;
+package nemolib;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,10 +39,10 @@ public class SubgraphCount implements SubgraphEnumerationResult
 
 	// uses interface's JavaDoc comment
 	@Override
-	public void label()
+	public void label(String labelGPath)
 	{
 		// get the canonical labels, which should be ordered.
-		Labeler labeler = new Labeler();
+		Labeler labeler = new Labeler(labelGPath);
 		Map<String, String> g6CanLabelMap = 
 				labeler.getCanonicalLabels(labelFreqMap.keySet());
 
