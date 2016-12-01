@@ -52,16 +52,18 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		labelVertexFreqMapMap.put(label, nodeFreqMap);
 	}
 
+	/*
 	public Set<String> getLabels() {
 		return labelVertexFreqMapMap.keySet();
 	}
+	*/
 
 	// uses interface JavaDoc comment
 	@Override
-	public void label(String labelGPath)
+	public void label()
 	{
 		// get the canonical labels, which should be ordered.
-		Labeler labeler = new Labeler(labelGPath);
+		Labeler labeler = new Labeler();
 		Map<String, String> g6CanLabelMap =
 				labeler.getCanonicalLabels(labelVertexFreqMapMap.keySet());
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * A variation on the ESU algorithm that samples only a portion of the target
+ * RandESU is a static class used for executing the RandESU on a portion of a
  * network graph.
  */
 public class RandESU 
@@ -57,10 +57,17 @@ public class RandESU
 		}
 	}
 
-	/** executes RandESU for a node on the input graph
-
-
-	*/
+	/**
+	 * Enumerates all subgraphSize Subgraphs for the specified vertice's branch
+	 * of an ESU execution tree using the RAND-ESU algorithm. Allows for more
+	 * control over execution order compared to the enumerate method that does
+	 * not include a vertex parameter.
+	 * @param graph the graph on which to execute RAND-ESU
+	 * @param subgraphs
+	 * @param subgraphSize
+	 * @param probs
+	 * @param vertex
+	 */
 	public static void enumerate (Graph graph,
 		SubgraphEnumerationResult subgraphs,
 		int subgraphSize, List<Double> probs, int vertex) {

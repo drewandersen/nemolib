@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Implementation of graph data structure to manage network graphs.
+ */
 public class Graph implements Serializable {
 	private List<AdjacencyList> adjacencyLists;
 

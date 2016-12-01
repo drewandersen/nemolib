@@ -3,13 +3,23 @@ package nemolib;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The Labeler class combines g6 subgraph labels into canonical subgraph labels
+ * using Brandon McKay's Nauty algorithm and the Nauty Traces labelg
+ * implementation of that algorithm.
+ *
+ * Presently, nemolib requires client programs to install labelg in the
+ * directory of execution for their programs. We hope to create a Java
+ * implementation of the Nauty algorithm in a future release in order to
+ * remove this requirement.
+ */
 public final class Labeler {
 
 	// class variable
 	static int instanceCounter = 0;
 	
     // labelg program options
-    private static String labelGPath = "labelg"
+    private static final String labelGPath = "./labelg";
     private static final int invariant = 3;
     private static final int mininvarlevel = 1;
     private static final int maxinvarlevel = 100;
@@ -23,20 +33,19 @@ public final class Labeler {
     private final String outputFilename;
     private final String[] args;
 
+    /**
+     * Construct a labeler object. By default, will search for the labelg
+     * binary in the directory of execution.
+     */
     public Labeler() {
-        long currentTime = System.currentTimeMillis();
-        this.inputFilename = filePrefix + "rawgraph6_" +
-                             currentTime + filePostfix + instanceCounter;
-        this.outputFilename = filePrefix + "canonical_" +
-                              currentTime + filePostfix + instanceCounter;
-        this.args = getArgs();
-		
-		instanceCounter++;
-    }
+	    long currentTime = System.currentTimeMillis();
+	    this.inputFilename = filePrefix + "rawgraph6_" +
+			    currentTime + filePostfix + instanceCounter;
+	    this.outputFilename = filePrefix + "canonical_" +
+			    currentTime + filePostfix + instanceCounter;
+	    this.args = getArgs();
 
-    public Labeler(String labelGPath) {
-		this.labelGPath = labelGPath;
-		Labeler();
+	    instanceCounter++;
     }
 
     private String[] getArgs() {
@@ -49,7 +58,8 @@ public final class Labeler {
         return args;
     }
 
-    public Map<String, Set<Double>> g6toCanonical(Map<String,
+    // TODO possibly remove this method; does not appear to be used
+    private Map<String, Set<Double>> g6toCanonical(Map<String,
             Set<Double>> labelRelFreqsMap) {
         Map<String, String> g6CanLabelMap =
                 getCanonicalLabels(labelRelFreqsMap.keySet());

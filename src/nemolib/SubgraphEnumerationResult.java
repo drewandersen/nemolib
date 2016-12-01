@@ -18,11 +18,10 @@ public interface SubgraphEnumerationResult
 	void add(Subgraph currentSubgraph);
 
 	/**
-	 * Merges g6 labels into SubgraphProfile labels. Highly recommended to use 
-	 * the Labeler class to accomplish this.
-	 * @param labelGPath the absolute path to the labelg binar
+	 * Merges g6 labels into SubgraphProfile labels. Recommended to use the
+	 * Labeler class to accomplish this.
 	 */
-	void label(String labelGPath);
+	void label();
 
 	/**
 	 * Calculates and returns a map of relative frequencies or concentrations

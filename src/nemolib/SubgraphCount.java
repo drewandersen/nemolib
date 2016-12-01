@@ -39,10 +39,10 @@ public class SubgraphCount implements SubgraphEnumerationResult
 
 	// uses interface's JavaDoc comment
 	@Override
-	public void label(String labelGPath)
+	public void label()
 	{
 		// get the canonical labels, which should be ordered.
-		Labeler labeler = new Labeler(labelGPath);
+		Labeler labeler = new Labeler();
 		Map<String, String> g6CanLabelMap = 
 				labeler.getCanonicalLabels(labelFreqMap.keySet());
 

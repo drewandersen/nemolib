@@ -10,14 +10,14 @@ public class Subgraph {
     private AdjacencyMatrix matrix;
     private int currentSize;
 
-    Subgraph(int order) {
+    public Subgraph(int order) {
         // 'order' refers to the number of nodes the subgraph will contain
         this.currentSize = 0;
         this.nodes       = new int[order];
         this.matrix      = new AdjacencyMatrix(order);
     }
 
-    Subgraph copy() {
+    public Subgraph copy() {
         Subgraph copy = new Subgraph(order());
         copy.currentSize = currentSize;
 	    System.arraycopy(nodes, 0, copy.nodes, 0, nodes.length);
