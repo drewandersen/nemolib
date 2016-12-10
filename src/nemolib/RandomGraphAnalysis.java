@@ -23,7 +23,8 @@ public final class RandomGraphAnalysis {
 	 * @param randomGraphCount the number of random graphs to use for analysis
 	 * @param subgraphSize the size of subgraph to enumerate
 	 * @param probs the probability vector to be used by the RAND-ESU algorithm
-	 * @return
+	 * @return mapping of labels to relative frequencies as found in the 
+	 * random graph pool
 	 */
 	public static Map<String, List<Double>> analyze (Graph targetGraph,
 	                                                 int randomGraphCount,

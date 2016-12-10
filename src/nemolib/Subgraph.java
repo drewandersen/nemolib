@@ -3,13 +3,19 @@ package nemolib;
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 
+/**
+ * A specialized class for representing instances of subgraphs.
+ */
 public class Subgraph {
 
-	// TODO consider making this a set
     private int[] nodes;
     private AdjacencyMatrix matrix;
     private int currentSize;
 
+	/**
+	 * Construct a subgraph of a specified order (i.e. number of nodes)
+	 * @param order the order of this subgraphs
+	 */
     public Subgraph(int order) {
         // 'order' refers to the number of nodes the subgraph will contain
         this.currentSize = 0;
@@ -17,6 +23,10 @@ public class Subgraph {
         this.matrix      = new AdjacencyMatrix(order);
     }
 
+	/**
+	 * Create a deep copy of this subgraph
+	 * @return a deep copy of this subgraph
+	 */
     public Subgraph copy() {
         Subgraph copy = new Subgraph(order());
         copy.currentSize = currentSize;
@@ -25,33 +35,61 @@ public class Subgraph {
         return copy;
     }
 
-    int size() {
+	//TODO rename this. Size should refer to the number of edges
+	/**
+	 * Get the current size of this Subgraph.
+	 * @return the size of this Subgraph.
+	 */ 
+    public int size() {
         return currentSize;
     }
 
-    int order() {
+	/**
+	 * Get number of possible nodes in this Subgraph
+	 * @return the maximum order of this Subgraph
+	 */
+    public int order() {
         return nodes.length;
     }
 
-    boolean isComplete() {
+	/**
+	 * Test whether this subgraph has been filled
+	 * @return true if subgraph is full; false otherwise
+	 */
+    public boolean isComplete() {
         return size() == order();
     }
 
-    int root() {
+	/**
+	 * Gets the id number of the first vertex added to this Subgraph
+	 * @return the id of the root
+	 */
+    public int root() {
         return nodes[0];
     }
 
-    boolean contains(int node) {
+	/**
+	 * Check whether a vertex exists in this Subgraph
+	 * @param node the target vertex
+	 * @return true if this subgraph contains the specified vertex, false
+	 * otherwise
+	 */
+    public boolean contains(int vertex) {
         for (int i = 0; i < size(); i++) {
-            if (nodes[i] == node) {
+            if (nodes[i] == vertex) {
                 return true;
             }
         }
         return false;
     }
 
-    public void add(int node, AdjacencyList adjacencyList) {
-        int index = node;
+	/**
+	 * Add a vertex to this Subgraph
+	 * @param vertex the vertex to add to this Subgraph
+	 * @param adjacencyList the adjacencyList of the vertex being added
+	 */
+    public void add(int vertex, AdjacencyList adjacencyList) {
+        int index = vertex;
         nodes[currentSize] = index;
 
         for (int i = 0; i < currentSize; i++) {
@@ -62,14 +100,27 @@ public class Subgraph {
         currentSize++;
     }
 
-    int get(int index) {
-        return nodes[index];
+	/**
+	 * Get the nth node added to this Subgraph
+	 * @return the nth node added to this Subgraph
+	 */
+    public int get(int n) {
+        return nodes[n];
     }
 
-    int[] getNodes( ) {
+	/**
+	 * Get all the nodes in this Subgraph
+	 * @return this Subgraph's nodes
+	 */
+    public int[] getNodes( ) {
         return nodes;
     }
 
+	/**
+	 * Return a string representation of this Subgraph. Should display in the 
+	 * format [x, y, z], where x, y, and z represent vertices in this subgraph.
+	 * @return a string representation of this subgraph
+	 */
     @Override
     public String toString() {
         String s = "[";
@@ -80,6 +131,10 @@ public class Subgraph {
         return s;
     }
 
+	/**
+	 * Get the g6 label (byteString) for this Subgraph
+	 * @return the g6 label for this Subgraph
+	 */
     public String getByteString() {
         try {
             return new String(matrix.toBytes(), "UTF-8");
