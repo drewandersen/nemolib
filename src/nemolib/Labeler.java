@@ -38,14 +38,13 @@ public final class Labeler {
      * binary in the directory of execution.
      */
     public Labeler() {
+	    instanceCounter++;
 	    long currentTime = System.currentTimeMillis();
 	    this.inputFilename = filePrefix + "rawgraph6_" +
 			    currentTime + filePostfix + instanceCounter;
 	    this.outputFilename = filePrefix + "canonical_" +
 			    currentTime + filePostfix + instanceCounter;
 	    this.args = getArgs();
-
-	    instanceCounter++;
     }
 
     private String[] getArgs() {
