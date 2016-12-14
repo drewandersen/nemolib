@@ -100,6 +100,11 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		labelVertexFreqMapMap = canLabelVertexFreqMapMap;
 	}
 
+	/**
+	 * Merge this SubgraphProfile with another SubgraphProfile
+	 * @param other the other SubgraphProfile to merge with this 
+	 * SubgraphProfile
+	 */
 	public void merge(SubgraphProfile other) {
 		for (String otherLabel : other.labelVertexFreqMapMap.keySet()) {
 			if (!this.labelVertexFreqMapMap.containsKey(otherLabel)) {
@@ -125,12 +130,9 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	}
 
 	@Override
-	public Map<String, Double> getRelativeFrequencies()
-	{
+	public Map<String, Double> getRelativeFrequencies() {
 		Map<String, Double> result = new HashMap<>();
-
 		double totalSubgraphCount = (double) getTotalSubgraphCount();
-
 		Set<String> labels = labelVertexFreqMapMap.keySet();
 		for (String label : labels) {
 			int total = 0;
@@ -143,6 +145,19 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 			result.put(label, relFreq);
 		}
 		return result;
+	}
+
+
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+		result.append("Node\tLabel").append(newline);
+		result.append('\t');
+		for (String label : labelVertexFreqMapMap.keySet()) {
+			result.append(label).append('\t');
+		}
+		return result.toString();
 	}
 
 	private int getTotalSubgraphCount() {
