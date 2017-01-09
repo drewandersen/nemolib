@@ -22,7 +22,7 @@ included bash script `compile.sh`. Doing so will create a jar file called
 
 Example Programs
 ----------------
-Example programs can be found at https://bitbucket.org/drewda81/nemoprofile/
+Example programs can be found at https://github.com/drewandersen/nemoprofile/
 
 Documentation
 -------------
