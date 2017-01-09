@@ -70,7 +70,7 @@ public class Subgraph {
 
 	/**
 	 * Check whether a vertex exists in this Subgraph
-	 * @param node the target vertex
+	 * @param vertex the target vertex
 	 * @return true if this subgraph contains the specified vertex, false
 	 * otherwise
 	 */

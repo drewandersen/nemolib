@@ -19,7 +19,7 @@ public class Graph implements Serializable {
 	 * Construct a graph object from a file. The file must contain two nodes 
 	 * on each line representing an edge.
 	 *
-	 * @filename the name of the file from which to construct the graph.
+	 * @param filename the name of the file from which to construct the graph.
 	 */
     public Graph(String filename) throws IOException
     {
