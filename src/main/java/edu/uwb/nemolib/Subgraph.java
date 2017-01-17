@@ -1,4 +1,4 @@
-package nemolib;
+package edu.uwb.nemolib;
 
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;

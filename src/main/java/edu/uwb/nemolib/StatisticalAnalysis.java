@@ -1,4 +1,4 @@
-package nemolib;
+package edu.uwb.nemolib;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

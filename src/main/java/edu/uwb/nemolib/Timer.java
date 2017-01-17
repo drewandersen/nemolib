@@ -1,4 +1,4 @@
-package nemolib;
+package edu.uwb.nemolib;
 
 /**
  * A simple class to keep track of program execution time

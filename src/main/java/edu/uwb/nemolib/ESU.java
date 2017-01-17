@@ -1,4 +1,4 @@
-package nemolib;
+package edu.uwb.nemolib;
 
 import java.util.ArrayList;
 import java.util.List;
