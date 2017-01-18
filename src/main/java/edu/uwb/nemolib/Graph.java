@@ -1,5 +1,3 @@
-// TODO retain mapping of nodeID to nodeName from input file
-
 package edu.uwb.nemolib;
 
 import java.io.Serializable;
@@ -112,7 +110,10 @@ public class Graph implements Serializable {
 			if (o.getClass() != this.getClass()) {
 				return false;
 			}
-			return (this.nodeA == ((Edge)o).nodeA && this.nodeB == ((Edge)o).nodeB) || (this.nodeA == ((Edge)o).nodeB && this.nodeB == ((Edge)o).nodeA);
+			return (this.nodeA == ((Edge)o).nodeA &&
+					this.nodeB == ((Edge)o).nodeB) ||
+					(this.nodeA == ((Edge)o).nodeB &&
+							this.nodeB == ((Edge)o).nodeA);
 		}
 
 		@Override

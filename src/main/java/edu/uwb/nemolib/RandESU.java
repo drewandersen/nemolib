@@ -8,8 +8,7 @@ import java.util.Random;
  * RandESU is a static class used for executing the RandESU on a portion of a
  * network graph.
  */
-public class RandESU 
-{
+public class RandESU {
 	// prevent instantiation via default constructor
 	private RandESU()
 	{
@@ -57,7 +56,7 @@ public class RandESU
 	}
 
 	/**
-	 * Enumerates all subgraphSize Subgraphs for the specified vertice's branch
+	 * Enumerates all subgraphSize Subgraphs for the specified vertex's branch
 	 * of an ESU execution tree using the RAND-ESU algorithm. Allows for more
 	 * control over execution order compared to the enumerate method that does
 	 * not include a vertex parameter.
@@ -157,7 +156,8 @@ public class RandESU
 	// determines whether or not to extend based on a given probability, given
 	// as an integer.
 	// precondition: 0.0 <= prob <= 1.0
-	private static boolean shouldExtend(double prob) throws IllegalArgumentException {
+	private static boolean shouldExtend(double prob) throws
+			IllegalArgumentException {
 
 		if (prob == 1.0) {
 			return true;
@@ -180,7 +180,9 @@ public class RandESU
 	// returns true if the node index is exclusive to the given subgraph
 	// (that is, is not already in the subgraph, and is not adjacent to any of
 	//  the nodes in the subgraph)
-	private static boolean isExclusive(Graph graph, int node, Subgraph subgraph) {
+	private static boolean isExclusive(Graph graph,
+	                                   int node,
+	                                   Subgraph subgraph) {
 		for (int i = 0; i < subgraph.size(); i++) {
 			int subgraphNode = subgraph.get(i);
 			if (subgraphNode == node) {

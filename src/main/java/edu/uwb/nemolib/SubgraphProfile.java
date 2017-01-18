@@ -147,7 +147,11 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		return result;
 	}
 
-
+	/**
+	 * Returns a string representation of this SubgraphProfile, with rows
+	 * representing vertex id numbers and columns representing subgraph labels.
+	 * @return a string representation of this SubgraphProfile object.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
