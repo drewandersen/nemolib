@@ -10,15 +10,16 @@ mind.
 Prerequisites
 -------------
 * A Linux operating environment.
-* Java Developers Kit (jdk) version 8 or higher
-* A copy of the Nauty Traces `labelg` binary for your execution environment. 
+* JDK version 8 or higher
+* [Maven](https://maven.apache.org/) version 3.0 or higher
+* A copy of the Nauty Traces `labelg` binary for your execution environment.
 You can download labelg from http://pallini.di.uniroma1.it/. 
 
-Installation
-------------
-In most Linux environments, you can simply compile nemolib using the 
-included bash script `compile.sh`. Doing so will create a jar file called 
-`nemolib.jar` and place it in the users' `~/lib/` directory.
+Installation and Use
+--------------------
+Use the `mvn -package` command from the root directory to generate a jar file
+in the `target` subdirectory containing the nemolib library. Any classes 
+which implement nemolib should use the statement `import edu.uwb.nemolib;`.
 
 Example Programs
 ----------------
