@@ -6,12 +6,25 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by user on 1/17/17.
+ * The GraphParser class parses a text file into a Graph object. Each row of
+ * input text file represents an edge in the graph. Each row should consist of
+ * two integers separated by a single space, with each integer representing a
+ * vertex. Vertices are created automatically based on the edge information.
+ * Self edges and unconnected vertices are not allowed.
  */
 public class GraphParser {
-	// parses a data file into an adjacency list representing the graph
+
+	// prevent instantiation of default constructor
+	private GraphParser() {throw new AssertionError();}
+
+	/**
+	 * Parses a text file into a Graph object.
+	 * @param filename the file containing the edge data
+	 * @return a Graph object with the correct mapping
+	 * @throws IOException if input file cannot be found
+	 */
 	public static Graph parse(String filename) throws IOException {
-		Map<String, Integer> nameToIndex = new HashMap<String, Integer>();
+		Map<String, Integer> nameToIndex = new HashMap<>();
 		Graph output = new Graph();
 		// we read in all the data at once only so we can easily randomize it
 		// with Collections.shuffle()
@@ -42,5 +55,4 @@ public class GraphParser {
 		}
 		return output;
 	}
-
 }
