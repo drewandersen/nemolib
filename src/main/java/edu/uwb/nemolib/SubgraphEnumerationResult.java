@@ -12,10 +12,10 @@ public interface SubgraphEnumerationResult
 {
 	/**
 	 * Adds a Subgraph to this SubgraphEnumerationResult
-	 * @param currentSubgraph a Subgraph to add to this
+	 * @param currentSubgraph a Subgraph to addSubgraph to this
 	 * SubgraphEnumerationResult
 	 */
-	void add(Subgraph currentSubgraph);
+	void addSubgraph(Subgraph currentSubgraph);
 
 	/**
 	 * Merges g6 labels into SubgraphProfile labels. Recommended to use the
