@@ -8,12 +8,14 @@ import java.util.*;
  */
 public class Graph implements Serializable {
 	private List<AdjacencyList> adjacencyLists;
+	private int maxNodeId;
 
 	/**
 	 * Construct a graph object.
 	 */
     public Graph() {
 	    adjacencyLists = new ArrayList<>();
+	    maxNodeId = 0;
     }
 
 	/**
@@ -28,7 +30,7 @@ public class Graph implements Serializable {
 
 	/**
 	 * Add an edge between two existing vertices on this graph.
-	 * @param vertexA One of the vertices between which to add an edge.
+	 * @param vertexA One of the vertices between which to addSubgraph an edge.
 	 * @param vertexB The other vertex.
 	 * @return true if both vertexA and vertexB exist in this Graph; false
 	 * otherwise.
@@ -120,6 +122,5 @@ public class Graph implements Serializable {
 	    public String toString() {
 			return "[" + nodeA + ", " + nodeB + "]";
 		}
-
 	}
 }

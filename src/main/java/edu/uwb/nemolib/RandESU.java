@@ -110,7 +110,7 @@ public class RandESU {
 					Subgraph subgraphUnion = subgraph.copy();
 					subgraphUnion.add(w, graph.getAdjacencyList(w));
 					synchronized(subgraphs) {
-						subgraphs.add(subgraphUnion);
+						subgraphs.addSubgraph(subgraphUnion);
 					}
 				}
 			}
@@ -126,7 +126,7 @@ public class RandESU {
 			AdjacencyList nextExtension = extension.copy();
 
 			// examine each node 'u' from the set of nodes adjacent to 'w'
-			// and add it to the next extension if it is exclusive
+			// and addSubgraph it to the next extension if it is exclusive
 			CompactHashSet.Iter uIter = graph.getAdjacencyList(w).iterator();
 			while (uIter.hasNext())
 			{

@@ -1,9 +1,7 @@
 package edu.uwb.nemolib;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The SubgraphProfile is an enumeration of each label, grouped by network
@@ -31,7 +29,7 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 
 	// uses interface JavaDoc comment
 	@Override
-	public void add(Subgraph currentSubgraph)
+	public void addSubgraph(Subgraph currentSubgraph)
 	{
 		int[] vertices = currentSubgraph.getNodes();
 		String label = currentSubgraph.getByteString();
@@ -52,11 +50,18 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		labelVertexFreqMapMap.put(label, nodeFreqMap);
 	}
 
-	/*
-	public Set<String> getLabels() {
-		return labelVertexFreqMapMap.keySet();
+	public boolean addFrequencies(String label,
+	                           Map<Integer, Integer> frequencies) {
+		if (labelVertexFreqMapMap.containsKey(label)) {
+			return false;
+		}
+		labelVertexFreqMapMap.put(label, frequencies);
+		return true;
 	}
-	*/
+
+	public Map<Integer, Integer> getFrequencies(String label) {
+		return labelVertexFreqMapMap.getOrDefault(label, null);
+	}
 
 	// uses interface JavaDoc comment
 	@Override
@@ -156,14 +161,22 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		String newline = System.getProperty("line.separator");
-		result.append("Node\tLabel").append(newline);
-		result.append('\t');
-		for (String label : labelVertexFreqMapMap.keySet()) {
-			result.append(label).append('\t');
+
+		for (Map.Entry<String, Map<Integer, Integer>> labelFreqs :
+				labelVertexFreqMapMap.entrySet()) {
+			result.append(labelFreqs.getKey());
+			result.append(newline);
+			for (Map.Entry<Integer, Integer> nodeFreqs :
+					labelFreqs.getValue().entrySet()) {
+				result.append("[" + nodeFreqs.getKey() + "," +
+						nodeFreqs.getValue() + "]");
+			}
+			result.append(newline);
 		}
 		return result.toString();
 	}
 
+	// Returns the total number of subgraphs in this SubgraphProfile
 	private int getTotalSubgraphCount() {
 		int total = 0;
 		for (Map.Entry<String, Map<Integer, Integer>> labelVertexFreqMap :

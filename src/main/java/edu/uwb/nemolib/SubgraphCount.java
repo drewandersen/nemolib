@@ -26,7 +26,7 @@ public class SubgraphCount implements SubgraphEnumerationResult
 
 	// uses interface's JavaDoc comment
 	@Override
-	public void add(Subgraph currentSubgraph)
+	public void addSubgraph(Subgraph currentSubgraph)
 	{
 		String label = currentSubgraph.getByteString();
 		int total = 0;

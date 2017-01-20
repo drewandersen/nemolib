@@ -14,83 +14,112 @@ public final class StatisticalAnalysis {
 
 	// labels mapped to a list containing relativeFrequencies
 	private Map<String, Double> targetGraphRelFreqs;
-	private Map<String, List<Double>> randomGraphRelFreqs;
-	int randGraphCount;
+	private Map<String, Double> zScores;
+	private Map<String, Double> pValues;
 
 	// do not allow default constructor
 	private StatisticalAnalysis() {
 		throw new AssertionError();
 	}
 
-	public StatisticalAnalysis(Map<String, Double> targetGraphRelFreqsMap,
-	                    Map<String, List<Double>> randomGraphRelFreqsMap,
-	                    int randGraphCount) {
-		this.targetGraphRelFreqs = targetGraphRelFreqsMap;
-		this.randomGraphRelFreqs = randomGraphRelFreqsMap;
-		this.randGraphCount = randGraphCount;
+	/**
+	 * Constructor for a Statistical Analysis object.
+	 * @param randGraphRelFreqs Labels paired with lists of relative
+	 *                          frequencies of subgraph patterns found in
+	 *                          a random graph pool
+	 * @param targetGraphRelFreqs Labels paired with relative frequencies as
+	 *                            found in the target network.
+	 */
+	public StatisticalAnalysis( Map<String, List<Double>> randGraphRelFreqs,
+								Map<String, Double> targetGraphRelFreqs) {
+		this.targetGraphRelFreqs = targetGraphRelFreqs;
+		this.zScores = new HashMap<>();
+		calculateZScores(randGraphRelFreqs, targetGraphRelFreqs);
+		this.pValues = new HashMap<>();
+		calculatePValues(randGraphRelFreqs, targetGraphRelFreqs);
 	}
 
+	/**
+	 * Get the z-scores for this StatisticalAnalysis object.
+	 * @return a map containing labels and corresponding z-scores
+	 */
 	public Map<String, Double> getZScores() {
-		Map<String, Double> zScores = new HashMap<>();
-		for (String label : randomGraphRelFreqs.keySet()) {
-			double randMean = calcRandMean(label);
-			double randStdDev = calcRandStdDev(label, randMean);
-			double targetGraphFreq = 0.0;
-			if (targetGraphRelFreqs.containsKey(label)) {
-				targetGraphFreq = targetGraphRelFreqs.get(label);
-			}
+		return zScores;
+	}
+
+	/**
+	 * Get the z-score for a specified label for the data sets contained in
+	 * this StatisticalAnalysis object
+	 * @param label the label for which to get the z-score
+	 * @return the z-score for the given label
+	 */
+	private double getZScore(String label) {
+		return zScores.getOrDefault(label, 0.0);
+	}
+
+	/**
+	 * Get the p-values for this StatisticalAnalysis object.
+	 * @return a map containing labels and corresponding p-values
+	 */
+	public Map<String, Double> getPValues() {
+		return pValues;
+	}
+
+	/**
+	 * Get the p-value for a specified label for the data sets contained in
+	 * this StatisticalAnalysis object
+	 * @param label the label for which to get the z-score
+	 * @return the z-score for the given label
+	 */
+	private double getPValue(String label) {
+		return pValues.getOrDefault(label, 0.0);
+	}
+
+	// calculates z-scores for this Statistical Analysis object
+	private void calculateZScores ( Map<String, List<Double>> randGraphRelFreqs,
+									Map<String, Double> targetGraphRelFreqs) {
+		for (Map.Entry<String, List<Double>> labelFreqPair :
+				randGraphRelFreqs.entrySet()) {
+			String label = labelFreqPair.getKey();
+			List<Double> freqs = labelFreqPair.getValue();
+			double randMean = calcMean(freqs);
+			double randStdDev = calcStdDev(randMean, freqs);
+			double targetGraphFreq =
+					targetGraphRelFreqs.getOrDefault(label, 0.0);
 			double zScore = 0.0;
 			if (randStdDev != 0) {
 				zScore = (targetGraphFreq - randMean) / randStdDev;
 			}
 			zScores.put(label, zScore);
 		}
-		return zScores;
 	}
 
-	public double getZScore(String label) {
-		double randMean = calcRandMean(label);
-		double randStdDev = calcRandStdDev(label, randMean);
-		return getZScore(label, randMean, randStdDev);
-	}
-
-	public double getZScore(String label, double mean, double stdDev) {
-
-		double targetGraphFreq = 0.0;
-		if (targetGraphRelFreqs.containsKey(label)) {
-			targetGraphFreq = targetGraphRelFreqs.get(label);
-		}
-		double zScore = 0.0;
-		if (stdDev != 0) {
-			zScore = (targetGraphFreq - mean) / stdDev;
-		}
-		return zScore;
-	}
-
-	private double calcRandStdDev(String label, double randMean) {
+	// calculates the standard deviation for a random
+	private double calcStdDev(double randMean, List<Double> values) {
 		double variance = 0.0;
-		for (double randFreq : randomGraphRelFreqs.get(label)) {
-			double distance = randFreq - randMean;
+		for (double value : values) {
+			double distance = value - randMean;
 			double squaredDistance = Math.pow(distance, 2);
 			variance += squaredDistance;
 		}
-		return Math.sqrt(variance / (randGraphCount - 1));
+		return Math.sqrt(variance / (values.size() - 1));
 	}
 
-
-	public Map<String, Double> getPValues()
-	{
-		Map<String, Double> pValues = new HashMap<>();
-		for(String label : randomGraphRelFreqs.keySet())
+	// calculates the p-values for this object
+	private void calculatePValues(Map<String, List<Double>> randGraphRelFreqs,
+	                              Map<String, Double> targetGraphRelFreqs) {
+		for(String label : randGraphRelFreqs.keySet())
 		{
-			double pValue = getPValue(label);
+			double pValue = calcPValue(label, randGraphRelFreqs,
+					targetGraphRelFreqs);
 			pValues.put(label, pValue);
 		}
-		return pValues;
 	}
 
-	public double getPValue(String label) {
-
+	// calculates a p-value for an specified label
+	private double calcPValue(String label,
+	                          Map<String, List<Double>> randomGraphRelFreqs,
+	                          Map<String, Double> targetGraphRelFreqs) {
 		// if a label appears in the target graph that didn't show up in any
 		// random graphs, clearly it's a network motif. This scenario shouldn't
 		// happen for a reasonable number of random graphs
@@ -106,7 +135,6 @@ public final class StatisticalAnalysis {
 			return 1;
 		}
 
-
 		int prePValue = 0;
 		List<Double> randFreqs = randomGraphRelFreqs.get(label);
 		double targetFreq = targetGraphRelFreqs.get(label);
@@ -117,27 +145,25 @@ public final class StatisticalAnalysis {
 			}
 		}
 		double randFreqCount = randFreqs.size();
-		double pValue = (double) prePValue / randFreqCount;
-		return pValue;
+		return (double) prePValue / randFreqCount;
 	}
 
-	private double calcRandMean(String label) {
+	//
+	private double calcMean(List<Double> values) {
 		double total = 0.0;
-		List<Double> relFreqs = randomGraphRelFreqs.get(label);
-		if (relFreqs.isEmpty()) { return 0; }
-		for (double randFreq : relFreqs ) {
+		for (double randFreq : values ) {
 			total += randFreq;
 		}
-		return total / (double) relFreqs.size();
+		return total / values.size();
 	}
 
 	@Override
 	public String toString() {
 		NumberFormat nf = new DecimalFormat("0.000");
 		StringBuilder sb = new StringBuilder();
-		sb.append("Label\tRelFreq\t\tMean\t\tStDev\t\tZ-Score\t\tP-Value");
+		sb.append("Label\tRelFreq\tZ-Score\tP-Value");
 		sb.append(String.format("%n"));
-		for (String label : randomGraphRelFreqs.keySet()) {
+		for (String label : zScores.keySet()) {
 			sb.append(label).append('\t');
 			if (targetGraphRelFreqs.containsKey(label)) {
 				double targetGraphRelFreqPerc =
@@ -146,13 +172,9 @@ public final class StatisticalAnalysis {
 			} else {
 				sb.append(nf.format(0.0));
 			}
-			sb.append("%\t\t");
-			double mean = calcRandMean(label);
-			sb.append(nf.format(mean * 100)).append("%\t\t");
-			double stDev = calcRandStdDev(label, mean);
-			sb.append(nf.format(stDev)).append("\t\t");
-			double zScore = getZScore(label, mean, stDev);
-			sb.append(nf.format(zScore)).append("\t\t");
+			sb.append("%\t");
+			double zScore = getZScore(label);
+			sb.append(nf.format(zScore)).append("\t");
 			double pValue = getPValue(label);
 			sb.append(nf.format(pValue));
 			sb.append(String.format("%n"));

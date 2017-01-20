@@ -47,7 +47,7 @@ public class GraphParser {
 			int fromIndex = output.getOrCreateIndex(edge[0], nameToIndex);
 			int toIndex   = output.getOrCreateIndex(edge[1], nameToIndex);
 
-			// don't add self edges
+			// don't addSubgraph self edges
 			if (fromIndex != toIndex) {
 				output.getAdjacencyList(fromIndex).add(toIndex);
 				output.getAdjacencyList(toIndex).add(fromIndex);

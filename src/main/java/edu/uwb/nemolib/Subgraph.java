@@ -85,7 +85,7 @@ public class Subgraph {
 
 	/**
 	 * Add a vertex to this Subgraph
-	 * @param vertex the vertex to add to this Subgraph
+	 * @param vertex the vertex to addSubgraph to this Subgraph
 	 * @param adjacencyList the adjacencyList of the vertex being added
 	 */
     public void add(int vertex, AdjacencyList adjacencyList) {
@@ -208,7 +208,7 @@ public class Subgraph {
                     currentBit = (currentBit + 1) % 6;
 
                     if (currentBit == 0) {
-                        // add byte to output (increment by 63
+                        // addSubgraph byte to output (increment by 63
                         // according to the graph6 algorithm)
                         output[currentIndex] = (byte)(currentByte + 63);
                         currentIndex++;

@@ -62,7 +62,7 @@ class CompactHashSet implements Serializable{
                 table[bucket][i] = NULL_ELEMENT;
             }
 
-            // add element to bucket
+            // addSubgraph element to bucket
             table[bucket][0] = element;
             size++;
             return;
@@ -75,7 +75,7 @@ class CompactHashSet implements Serializable{
             }
         }
 
-        // try to add element if there is space
+        // try to addSubgraph element if there is space
         for (int i = 0; i < table[bucket].length; i++) {
             if (table[bucket][i] == NULL_ELEMENT) {
                 table[bucket][i] = element;
@@ -84,7 +84,7 @@ class CompactHashSet implements Serializable{
             }
         }
 
-        // otherwise grow the bucket and add to first new position
+        // otherwise grow the bucket and addSubgraph to first new position
         int previousLength = table[bucket].length;
         grow(bucket);
         table[bucket][previousLength] = element;
