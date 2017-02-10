@@ -10,15 +10,16 @@ import java.util.Map;
  * Subsystem to store relative frequencies for each subgraph pattern / label and
  * calculate the p-values and z-scores for those labels.
  */
-public final class StatisticalAnalysis {
+public final class RelativeFrequencyAnalyzer {
 
 	// labels mapped to a list containing relativeFrequencies
-	private Map<String, Double> targetGraphRelFreqs;
+	private Map<String, Double> targetLabelToRelativeFrequencies;
+	private Map<String, Double> randomLabelToMeanRelativeFrequencies;
 	private Map<String, Double> zScores;
 	private Map<String, Double> pValues;
 
 	// do not allow default constructor
-	private StatisticalAnalysis() {
+	private RelativeFrequencyAnalyzer() {
 		throw new AssertionError();
 	}
 
@@ -30,17 +31,36 @@ public final class StatisticalAnalysis {
 	 * @param targetGraphRelFreqs Labels paired with relative frequencies as
 	 *                            found in the target network.
 	 */
-	public StatisticalAnalysis( Map<String, List<Double>> randGraphRelFreqs,
-								Map<String, Double> targetGraphRelFreqs) {
-		this.targetGraphRelFreqs = targetGraphRelFreqs;
+	public RelativeFrequencyAnalyzer(Map<String, List<Double>> randGraphRelFreqs,
+	                                 Map<String, Double> targetGraphRelFreqs) {
+		this.targetLabelToRelativeFrequencies = targetGraphRelFreqs;
 		this.zScores = new HashMap<>();
 		calculateZScores(randGraphRelFreqs, targetGraphRelFreqs);
 		this.pValues = new HashMap<>();
 		calculatePValues(randGraphRelFreqs, targetGraphRelFreqs);
+		this.randomLabelToMeanRelativeFrequencies = calcRandMeans(randGraphRelFreqs);
+	}
+
+	public Map<String, Double> getRandMeans() {
+		return randomLabelToMeanRelativeFrequencies;
+	}
+
+
+	private Map<String,Double> calcRandMeans(Map<String, List<Double>> randGraphRelFreqs) {
+		Map<String, Double> result = new HashMap<>();
+		for (Map.Entry<String, List<Double>> entry : randGraphRelFreqs.entrySet()){
+			double mean = 0.0;
+			for (double freq : entry.getValue()) {
+				mean += freq;
+			}
+			mean /= entry.getValue().size();
+			result.put(entry.getKey(), mean);
+		}
+		return result;
 	}
 
 	/**
-	 * Get the z-scores for this StatisticalAnalysis object.
+	 * Get the z-scores for this RelativeFrequencyAnalyzer object.
 	 * @return a map containing labels and corresponding z-scores
 	 */
 	public Map<String, Double> getZScores() {
@@ -49,7 +69,7 @@ public final class StatisticalAnalysis {
 
 	/**
 	 * Get the z-score for a specified label for the data sets contained in
-	 * this StatisticalAnalysis object
+	 * this RelativeFrequencyAnalyzer object
 	 * @param label the label for which to get the z-score
 	 * @return the z-score for the given label
 	 */
@@ -58,7 +78,7 @@ public final class StatisticalAnalysis {
 	}
 
 	/**
-	 * Get the p-values for this StatisticalAnalysis object.
+	 * Get the p-values for this RelativeFrequencyAnalyzer object.
 	 * @return a map containing labels and corresponding p-values
 	 */
 	public Map<String, Double> getPValues() {
@@ -67,7 +87,7 @@ public final class StatisticalAnalysis {
 
 	/**
 	 * Get the p-value for a specified label for the data sets contained in
-	 * this StatisticalAnalysis object
+	 * this RelativeFrequencyAnalyzer object
 	 * @param label the label for which to get the z-score
 	 * @return the z-score for the given label
 	 */
@@ -75,6 +95,7 @@ public final class StatisticalAnalysis {
 		return pValues.getOrDefault(label, 0.0);
 	}
 
+	// TODO Don't recalculate randMean
 	// calculates z-scores for this Statistical Analysis object
 	private void calculateZScores ( Map<String, List<Double>> randGraphRelFreqs,
 									Map<String, Double> targetGraphRelFreqs) {
@@ -161,18 +182,26 @@ public final class StatisticalAnalysis {
 	public String toString() {
 		NumberFormat nf = new DecimalFormat("0.000");
 		StringBuilder sb = new StringBuilder();
-		sb.append("Label\tRelFreq\tZ-Score\tP-Value");
+		sb.append("Label\tRelFreq\tRandMeanFreq\tZ-Score\tP-Value");
 		sb.append(String.format("%n"));
 		for (String label : zScores.keySet()) {
 			sb.append(label).append('\t');
-			if (targetGraphRelFreqs.containsKey(label)) {
+			if (targetLabelToRelativeFrequencies.containsKey(label)) {
 				double targetGraphRelFreqPerc =
-						targetGraphRelFreqs.get(label) * 100.0;
+						targetLabelToRelativeFrequencies.get(label) * 100.0;
 				sb.append(nf.format(targetGraphRelFreqPerc));
 			} else {
 				sb.append(nf.format(0.0));
 			}
-			sb.append("%\t");
+			sb.append("%\t\t");
+			if (randomLabelToMeanRelativeFrequencies.containsKey(label)) {
+				double randomGraphRelFreqPerc =
+						randomLabelToMeanRelativeFrequencies.get(label) * 100.0;
+				sb.append(nf.format(randomGraphRelFreqPerc));
+			} else {
+				sb.append(nf.format(0.0));
+			}
+			sb.append("%\t\t");
 			double zScore = getZScore(label);
 			sb.append(nf.format(zScore)).append("\t");
 			double pValue = getPValue(label);

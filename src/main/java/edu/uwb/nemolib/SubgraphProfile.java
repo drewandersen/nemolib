@@ -17,14 +17,14 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	// The primary structure of a subgraph profile. Essentially a table to map 
 	// labels(String) and nodes(Integer) to the frequency of subgraphs 
 	// of type label that include the node.
-	private Map<String, Map<Integer, Integer>> labelVertexFreqMapMap;
+	private Map<String, Map<Integer, Integer>> labelToVertexToFrequency;
 
 	/**
 	 * Construct a SubgraphProfile object
 	 */
 	public SubgraphProfile()
 	{
-		labelVertexFreqMapMap = new HashMap<>();
+		labelToVertexToFrequency = new HashMap<>();
 	}
 
 	// uses interface JavaDoc comment
@@ -33,34 +33,34 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	{
 		int[] vertices = currentSubgraph.getNodes();
 		String label = currentSubgraph.getByteString();
-		Map<Integer, Integer> nodeFreqMap =
-				labelVertexFreqMapMap.get(label);
-		if(nodeFreqMap == null) {
-			nodeFreqMap = new HashMap<>();
+		Map<Integer, Integer> nodeToFrequency =
+				labelToVertexToFrequency.get(label);
+		if(nodeToFrequency == null) {
+			nodeToFrequency = new HashMap<>();
 		}
 		for (int i = 0; i < vertices.length; i++) {
 			int currentNode = currentSubgraph.get(i);
 			int currentFreq = 0;
-			if (nodeFreqMap.containsKey(currentNode)) {
-				currentFreq = nodeFreqMap.get(currentNode);
+			if (nodeToFrequency.containsKey(currentNode)) {
+				currentFreq = nodeToFrequency.get(currentNode);
 			}
 			currentFreq++;
-			nodeFreqMap.put(currentNode, currentFreq);
+			nodeToFrequency.put(currentNode, currentFreq);
 		}
-		labelVertexFreqMapMap.put(label, nodeFreqMap);
+		labelToVertexToFrequency.put(label, nodeToFrequency);
 	}
 
 	public boolean addFrequencies(String label,
 	                           Map<Integer, Integer> frequencies) {
-		if (labelVertexFreqMapMap.containsKey(label)) {
+		if (labelToVertexToFrequency.containsKey(label)) {
 			return false;
 		}
-		labelVertexFreqMapMap.put(label, frequencies);
+		labelToVertexToFrequency.put(label, frequencies);
 		return true;
 	}
 
 	public Map<Integer, Integer> getFrequencies(String label) {
-		return labelVertexFreqMapMap.getOrDefault(label, null);
+		return labelToVertexToFrequency.getOrDefault(label, null);
 	}
 
 	// uses interface JavaDoc comment
@@ -69,40 +69,41 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	{
 		// get the canonical labels, which should be ordered.
 		Labeler labeler = new Labeler();
-		Map<String, String> g6CanLabelMap =
-				labeler.getCanonicalLabels(labelVertexFreqMapMap.keySet());
+		Map<String, String> g6LabelToCanonicalLabel =
+				labeler.getCanonicalLabels(labelToVertexToFrequency.keySet());
 
 		// make a replacement structure for the original map
-		Map<String, Map<Integer, Integer>> canLabelVertexFreqMapMap =
+		Map<String, Map<Integer, Integer>> canLabelToVertexToFrequency =
 				new HashMap<>();
 
 		// merge labelFreqMap into canLabelFreqMap
-		for (Map.Entry<String, Map<Integer, Integer>> labelVertexFreqMap:
-				labelVertexFreqMapMap.entrySet() )
+		for (Map.Entry<String, Map<Integer, Integer>> g6VertexToFrequency:
+				labelToVertexToFrequency.entrySet() )
 		{
 			// must exist
-			String canLabel = g6CanLabelMap.get(labelVertexFreqMap.getKey());
+			String canLabel =
+					g6LabelToCanonicalLabel.get(g6VertexToFrequency.getKey());
 
-			Map<Integer, Integer> canVertexFreqMap =
-					canLabelVertexFreqMapMap.get(canLabel);
+			Map<Integer, Integer> vertexToFrequency =
+					canLabelToVertexToFrequency.get(canLabel);
 
-			if (canVertexFreqMap == null){
-				canVertexFreqMap = new HashMap<>();
+			if (vertexToFrequency == null){
+				vertexToFrequency = new HashMap<>();
 			}
 
 			for (Map.Entry<Integer, Integer> g6VertexFreq :
-					labelVertexFreqMap.getValue().entrySet())
+					g6VertexToFrequency.getValue().entrySet())
 			{
 				int vertex = g6VertexFreq.getKey();
 				int total = g6VertexFreq.getValue();
-				if (canVertexFreqMap.containsKey(vertex)) {
-					total += canVertexFreqMap.get(vertex);
+				if (vertexToFrequency.containsKey(vertex)) {
+					total += vertexToFrequency.get(vertex);
 				}
-				canVertexFreqMap.put(vertex, total);
+				vertexToFrequency.put(vertex, total);
 			}
-			canLabelVertexFreqMapMap.put(canLabel, canVertexFreqMap);
+			canLabelToVertexToFrequency.put(canLabel, vertexToFrequency);
 		}
-		labelVertexFreqMapMap = canLabelVertexFreqMapMap;
+		labelToVertexToFrequency = canLabelToVertexToFrequency;
 	}
 
 	/**
@@ -111,15 +112,15 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	 * SubgraphProfile
 	 */
 	public void merge(SubgraphProfile other) {
-		for (String otherLabel : other.labelVertexFreqMapMap.keySet()) {
-			if (!this.labelVertexFreqMapMap.containsKey(otherLabel)) {
-				this.labelVertexFreqMapMap.put(otherLabel,
-						other.labelVertexFreqMapMap.get(otherLabel));
+		for (String otherLabel : other.labelToVertexToFrequency.keySet()) {
+			if (!this.labelToVertexToFrequency.containsKey(otherLabel)) {
+				this.labelToVertexToFrequency.put(otherLabel,
+						other.labelToVertexToFrequency.get(otherLabel));
 			} else {
 				Map<Integer, Integer> otherLabelVertexFreqMap =
-						other.labelVertexFreqMapMap.get(otherLabel);
+						other.labelToVertexToFrequency.get(otherLabel);
 				Map<Integer, Integer> thisLabelVertexFreqMap =
-						this.labelVertexFreqMapMap.get(otherLabel);
+						this.labelToVertexToFrequency.get(otherLabel);
 				for (int vertex : otherLabelVertexFreqMap.keySet()) {
 					if (!thisLabelVertexFreqMap.containsKey(vertex)) {
 						thisLabelVertexFreqMap.put(vertex,
@@ -138,11 +139,11 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	public Map<String, Double> getRelativeFrequencies() {
 		Map<String, Double> result = new HashMap<>();
 		double totalSubgraphCount = (double) getTotalSubgraphCount();
-		Set<String> labels = labelVertexFreqMapMap.keySet();
+		Set<String> labels = labelToVertexToFrequency.keySet();
 		for (String label : labels) {
 			int total = 0;
 			Map<Integer, Integer> vertexFreqMap =
-					labelVertexFreqMapMap.get(label);
+					labelToVertexToFrequency.get(label);
 			for(Map.Entry<Integer, Integer> vertexFreq : vertexFreqMap.entrySet()) {
 				total += vertexFreq.getValue();
 			}
@@ -163,13 +164,13 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 		String newline = System.getProperty("line.separator");
 
 		for (Map.Entry<String, Map<Integer, Integer>> labelFreqs :
-				labelVertexFreqMapMap.entrySet()) {
+				labelToVertexToFrequency.entrySet()) {
 			result.append(labelFreqs.getKey());
 			result.append(newline);
 			for (Map.Entry<Integer, Integer> nodeFreqs :
 					labelFreqs.getValue().entrySet()) {
-				result.append("[" + nodeFreqs.getKey() + "," +
-						nodeFreqs.getValue() + "]");
+				result.append("[").append(nodeFreqs.getKey()).append(",")
+						.append(nodeFreqs.getValue()).append("]");
 			}
 			result.append(newline);
 		}
@@ -180,7 +181,7 @@ public class SubgraphProfile implements SubgraphEnumerationResult, Serializable
 	private int getTotalSubgraphCount() {
 		int total = 0;
 		for (Map.Entry<String, Map<Integer, Integer>> labelVertexFreqMap :
-				labelVertexFreqMapMap.entrySet()) {
+				labelToVertexToFrequency.entrySet()) {
 			for (Map.Entry<Integer, Integer> vertexFreqMap :
 					labelVertexFreqMap.getValue().entrySet()) {
 				total += vertexFreqMap.getValue();

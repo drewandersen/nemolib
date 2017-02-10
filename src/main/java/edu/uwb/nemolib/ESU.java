@@ -7,12 +7,9 @@ import java.util.List;
  * ESU is a static class used for executing the Enumerate Subgraphs algorithm
  * on a network graph.
  */
-public class ESU
+public class ESU implements SubgraphEnumerator
 {
-	// prevent default constructor from being called
-	private ESU() {
-		throw new AssertionError();
-	}
+	public ESU() {}
 
 	/**
 	 * Enumerates Subgraphs using the ESU algorithm. Requires user to specify
@@ -23,9 +20,8 @@ public class ESU
 	 *                  Subgraphs will be stored.
 	 * @param subgraphSize the size of the target Subgraphs
 	 */
-	public static void enumerate(Graph graph,
-	                      SubgraphEnumerationResult subgraphs,
-	                      int subgraphSize) {
+	public void enumerate(Graph graph, int subgraphSize,
+	                      SubgraphEnumerationResult subgraphs) {
 		for (int i = 0; i < graph.size(); i++) {
 			enumerate(graph, subgraphs, subgraphSize, i);
 		}
@@ -41,7 +37,7 @@ public class ESU
 	 * @param subgraphSize the target subgraph size to enumerate
 	 * @param vertex the graph vertex at which to execute
 	 */
-	public static void enumerate(Graph graph, SubgraphEnumerationResult subgraphs,
+	public void enumerate(Graph graph, SubgraphEnumerationResult subgraphs,
 	                      int subgraphSize, int vertex) {
 		List<Double> probs = new ArrayList<>();
 		for (int i = 0; i < subgraphSize; ++i)

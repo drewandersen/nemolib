@@ -1,41 +1,42 @@
 package edu.uwb.nemolib;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * RandomGraphAnalysis is a facade class that generates and enumerates using
+ * RandomGraphAnalyzer is a facade class that generates and enumerates using
  * RAND-ESU a set of random network graphs based on the degree sequence vector
  * of a specified graph. The output of the analyze() method can be used by a
- * StatisticalAnalysis object to determine whether a target graph contains any
+ * RelativeFrequencyAnalyzer object to determine whether a target graph contains any
  * network motifs.
  */
-public final class RandomGraphAnalysis {
+public final class RandomGraphAnalyzer {
 
-	// prevent default constructor from being instantiated
-	private RandomGraphAnalysis() {
-		throw new AssertionError();
+	SubgraphEnumerator enumerator;
+	int randomGraphCount;
+
+	public RandomGraphAnalyzer(SubgraphEnumerator enumerator,
+	                           int randomGraphCount) {
+		this.enumerator = enumerator;
+		this.randomGraphCount = randomGraphCount;
+
 	}
 
 	/**
 	 * Generate and enumerate a set of random graphs.
 	 * @param targetGraph the network graph from which to derive a degree
 	 *                    sequence vector for generating random graphs
-	 * @param randomGraphCount the number of random graphs to use for analysis
 	 * @param subgraphSize the size of subgraph to enumerate
-	 * @param probs the probability vector to be used by the RAND-ESU algorithm
-	 * @return mapping of labels to relative frequencies as found in the 
+	 * @return mapping of labels to relative frequencies as found in the
 	 * random graph pool
 	 */
-	public static Map<String, List<Double>> analyze (Graph targetGraph,
-	                                                 int randomGraphCount,
-	                                                 int subgraphSize,
-	                                                 List<Double> probs) {
+	public Map<String, List<Double>> analyze (Graph targetGraph, int subgraphSize) {
 
 		// create the return map and fill it with the labels we found in the
 		// target graph, as those are the only labels about which we care
-		// TODO consider changing this, as it creates the precondition of 
-		// executing the target graph analysis first
-		Map<String, List<Double>> labelRelFreqsMap = new HashMap<>();
+		Map<String, List<Double>> labelToRelativeFrequencies = new HashMap<>();
 
 		for(int i = 0; i < randomGraphCount; i++) {
 			// display status for every 100th graph
@@ -47,36 +48,33 @@ public final class RandomGraphAnalysis {
 
 			// enumerate random graphs
 			SubgraphCount subgraphCount = new SubgraphCount();
-			RandESU.enumerate(randomGraph, subgraphCount, subgraphSize, probs);
+			enumerator.enumerate(randomGraph, subgraphSize, subgraphCount);
 			subgraphCount.label();
 
 			Map<String, Double> curLabelRelFreqMap =
 					subgraphCount.getRelativeFrequencies();
 
-			// populate labelRelFreqsMap with result
+			// populate labelToRelativeFrequencies with result
 			for (Map.Entry<String, Double> curLabelRelFreqPair :
 					curLabelRelFreqMap.entrySet()) {
 				String curLabel = curLabelRelFreqPair.getKey();
 				Double curFreq = curLabelRelFreqPair.getValue();
 
-				if (!labelRelFreqsMap.containsKey(curLabel)) {
-					labelRelFreqsMap.put(curLabel, new LinkedList<Double>());
+				if (!labelToRelativeFrequencies.containsKey(curLabel)) {
+					labelToRelativeFrequencies.put(curLabel, new LinkedList<>());
 				}
-
-				labelRelFreqsMap.get(curLabel).add(curFreq);
-
+				labelToRelativeFrequencies.get(curLabel).add(curFreq);
 			}
 		}
 
 		// fill in with zeros any List that is less than subgraph count to
 		// ensure non-detection is accounted for.
 		for (List<Double> freqs :
-				labelRelFreqsMap.values()) {
+				labelToRelativeFrequencies.values()) {
 			while (freqs.size() < randomGraphCount) {
 				freqs.add(0.0);
 			}
 		}
-
-		return labelRelFreqsMap;
+		return labelToRelativeFrequencies;
 	}
 }

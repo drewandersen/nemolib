@@ -11,7 +11,7 @@ public class NemoProfileBuilder {
 	private NemoProfileBuilder() {throw new AssertionError();}
 
 	public static SubgraphProfile build(SubgraphProfile sp,
-	                  StatisticalAnalysis sa,
+	                  RelativeFrequencyAnalyzer sa,
 	                  double pThresh) {
 		SubgraphProfile result = new SubgraphProfile();
 		Map<String, Double> pValues = sa.getPValues();

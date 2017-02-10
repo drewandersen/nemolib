@@ -8,23 +8,29 @@ import java.util.Random;
  * RandESU is a static class used for executing the RandESU on a portion of a
  * network graph.
  */
-public class RandESU {
+public class RandESU implements SubgraphEnumerator {
+	List<Double> probs;
+
 	// prevent instantiation via default constructor
 	private RandESU()
 	{
 		throw new AssertionError();
 	}
 
+	public RandESU(List<Double> probs) {
+		this.probs = probs;
+	}
+
 	/**
-	 * Enumerates all subgraphSize Subgraphs in the input Graph using the 
+	 * Enumerates all subgraphSize Subgraphs in the input Graph using the
 	 * RAND-ESU algorithm.
 	 *
 	 * @param graph           the graph on which to execute RAND-ESU
 	 * @param subgraphSize    the size of the target Subgraphs
 	 */
-	public static void enumerate(Graph graph,
-	                      SubgraphEnumerationResult subgraphs,
-	                      int subgraphSize, List<Double> probs) {
+	public void enumerate(Graph graph,
+	                      int subgraphSize,
+	                      SubgraphEnumerationResult subgraphs) {
 		// maintain list of nodes selected so far
 		List<Integer> selectedVertices = new ArrayList<>();
 

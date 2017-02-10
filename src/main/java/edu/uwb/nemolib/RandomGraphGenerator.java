@@ -6,7 +6,7 @@ import java.util.*;
   * Generates random graphs from an input graph based on the degree sequence of 
   * the original graph.
   */
-public final class RandomGraphGenerator {
+final class RandomGraphGenerator {
 
 	/**
 	 * Private constructor to prevent instantiation
