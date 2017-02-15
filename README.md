@@ -23,7 +23,7 @@ An example program can be found in the package `edu.uwb.nemolib_examples`. More 
 
 Documentation
 -------------
-JavaDocs are auto-generated when you 
+JavaDocs are auto-generated when Maven creates the project.
 
 Future Project Ideas
 --------------------
