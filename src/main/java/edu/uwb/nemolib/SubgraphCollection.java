@@ -3,6 +3,9 @@ package edu.uwb.nemolib;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ */
 public class SubgraphCollection
 {
 	Set<Set<Integer>> subgraphs;

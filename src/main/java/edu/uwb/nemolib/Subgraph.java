@@ -37,8 +37,8 @@ public class Subgraph {
 
 	//TODO rename this. Size should refer to the number of edges
 	/**
-	 * Get the current size of this Subgraph.
-	 * @return the size of this Subgraph.
+	 * Get the current getSize of this Subgraph.
+	 * @return the getSize of this Subgraph.
 	 */ 
     public int size() {
         return currentSize;

@@ -8,7 +8,8 @@ import java.util.Map;
 
 /**
  * Subsystem to store relative frequencies for each subgraph pattern / label and
- * calculate the p-values and z-scores for those labels.
+ * calculate the p-values and z-scores for those labels. Performs calculations
+ * upon initialization.
  */
 public final class RelativeFrequencyAnalyzer {
 
@@ -160,7 +161,6 @@ public final class RelativeFrequencyAnalyzer {
 		List<Double> randFreqs = randomGraphRelFreqs.get(label);
 		double targetFreq = targetGraphRelFreqs.get(label);
 		for (double randFreq : randFreqs) {
-			// if randFreq >= targetFreq
 			if (randFreq >= targetFreq) {
 				prePValue++;
 			}
@@ -182,10 +182,10 @@ public final class RelativeFrequencyAnalyzer {
 	public String toString() {
 		NumberFormat nf = new DecimalFormat("0.000");
 		StringBuilder sb = new StringBuilder();
-		sb.append("Label\tRelFreq\tRandMeanFreq\tZ-Score\tP-Value");
+		sb.append("Label\tRelFreq\t\tRandMeanFreq\tZ-Score\tP-Value");
 		sb.append(String.format("%n"));
 		for (String label : zScores.keySet()) {
-			sb.append(label).append('\t');
+			sb.append(label).append("\t\t");
 			if (targetLabelToRelativeFrequencies.containsKey(label)) {
 				double targetGraphRelFreqPerc =
 						targetLabelToRelativeFrequencies.get(label) * 100.0;
@@ -201,7 +201,7 @@ public final class RelativeFrequencyAnalyzer {
 			} else {
 				sb.append(nf.format(0.0));
 			}
-			sb.append("%\t\t");
+			sb.append("%\t\t\t");
 			double zScore = getZScore(label);
 			sb.append(nf.format(zScore)).append("\t");
 			double pValue = getPValue(label);

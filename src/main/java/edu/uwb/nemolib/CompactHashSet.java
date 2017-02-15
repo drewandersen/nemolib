@@ -129,9 +129,9 @@ class CompactHashSet implements Serializable{
         }
     }
 
-    // increase the size of the bucket at the given index
+    // increase the getSize of the bucket at the given index
     private void grow(int bucketIndex) {
-        // double the bucket size
+        // double the bucket getSize
         int[] newBucket = new int[table[bucketIndex].length * 2];
 
         int index = 0;

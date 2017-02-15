@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public final class RandomGraphAnalyzer {
 
-	SubgraphEnumerator enumerator;
-	int randomGraphCount;
+	private SubgraphEnumerator enumerator;
+	private int randomGraphCount;
 
 	public RandomGraphAnalyzer(SubgraphEnumerator enumerator,
 	                           int randomGraphCount) {
@@ -28,7 +28,7 @@ public final class RandomGraphAnalyzer {
 	 * Generate and enumerate a set of random graphs.
 	 * @param targetGraph the network graph from which to derive a degree
 	 *                    sequence vector for generating random graphs
-	 * @param subgraphSize the size of subgraph to enumerate
+	 * @param subgraphSize the getSize of subgraph to enumerate
 	 * @return mapping of labels to relative frequencies as found in the
 	 * random graph pool
 	 */
@@ -39,11 +39,6 @@ public final class RandomGraphAnalyzer {
 		Map<String, List<Double>> labelToRelativeFrequencies = new HashMap<>();
 
 		for(int i = 0; i < randomGraphCount; i++) {
-			// display status for every 100th graph
-			if (i % 100 == 99) {
-				System.out.println("Analyzing random graph " + (i + 1) + "...");
-			}
-			// generate random graphs
 			Graph randomGraph = RandomGraphGenerator.generate(targetGraph);
 
 			// enumerate random graphs

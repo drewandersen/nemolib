@@ -26,7 +26,7 @@ public class RandESU implements SubgraphEnumerator {
 	 * RAND-ESU algorithm.
 	 *
 	 * @param graph           the graph on which to execute RAND-ESU
-	 * @param subgraphSize    the size of the target Subgraphs
+	 * @param subgraphSize    the getSize of the target Subgraphs
 	 */
 	public void enumerate(Graph graph,
 	                      int subgraphSize,
@@ -36,22 +36,22 @@ public class RandESU implements SubgraphEnumerator {
 
 		if (probs.get(0) == 1.0) // select all nodes
 		{
-			for (int i = 0; i < graph.size(); ++i) {
+			for (int i = 0; i < graph.getSize(); ++i) {
 				selectedVertices.add(i);
 			}
 		} else { // determine how many nodes should be sampled initially
 			int numVerticesToSelect =
-					(int) (Math.round(probs.get(0) * graph.size()));
+					(int) (Math.round(probs.get(0) * graph.getSize()));
 
 			Random rand = new Random();
 			// populate list with appropriate number of nodes
 			for (int numVerticesSelected = 0; numVerticesSelected <
 					numVerticesToSelect; ++numVerticesSelected) {
 
-				int nodeSelected = rand.nextInt(graph.size());
+				int nodeSelected = rand.nextInt(graph.getSize());
 				// ensure no duplicates
 				while (selectedVertices.contains(nodeSelected)) {
-					nodeSelected = rand.nextInt(graph.size());
+					nodeSelected = rand.nextInt(graph.getSize());
 				}
 				selectedVertices.add(nodeSelected);
 			}

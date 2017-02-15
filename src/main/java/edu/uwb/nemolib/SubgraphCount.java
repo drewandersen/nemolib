@@ -19,7 +19,7 @@ public class SubgraphCount implements SubgraphEnumerationResult
 	/**
 	 * Construct an empty SubgraphCount.
 	 */
-	SubgraphCount()
+	public SubgraphCount()
 	{
 		labelFreqMap = new HashMap<>();
 	}

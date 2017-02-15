@@ -50,8 +50,11 @@ public class Graph implements Serializable {
 	    }
     }
 
-    // get the number of nodes in the graph
-    public int size()
+	/**
+	 * Get the getSize of this Graph
+	 * @return the getSize of this graph
+	 */
+	public int getSize()
     {
         return adjacencyLists.size();
     }

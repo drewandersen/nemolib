@@ -11,13 +11,13 @@ final class RandomGraphGenerator {
 	/**
 	 * Private constructor to prevent instantiation
 	 */
-	private RandomGraphGenerator() {}
+	private RandomGraphGenerator() { throw new AssertionError(); }
 
 	/**
 	  * Generates random Graphs from an input Graph based on the degree
 	  * sequence of the original Graph.
 	  * @param inputGraph the Graph from which to derive the random Graphs
-	  * @return a random Graph of the same size and order as the original
+	  * @return a random Graph of the same getSize and order as the original
 	  */
 	static Graph generate(Graph inputGraph)
 	{
@@ -28,7 +28,7 @@ final class RandomGraphGenerator {
 		// the vertexList is a set where each node is represented by a number
 		// of elements equal to that vertex's degree
 		List<Integer> vertexList = new ArrayList<>();
-		for (int vertex = 0; vertex < inputGraph.size(); ++vertex) {
+		for (int vertex = 0; vertex < inputGraph.getSize(); ++vertex) {
 			randomGraph.addVertex();
 			for (int degree = 0; degree < degreeSequenceVector.get(vertex);
 					++degree) {
@@ -68,7 +68,7 @@ final class RandomGraphGenerator {
 		// the vertexList is a set where each node is represented by a number
 		// of elements equal to that vertex's degree
 		List<Integer> vertexList = new ArrayList<>();
-		for (int vertex = 0; vertex < inputGraph.size(); ++vertex) {
+		for (int vertex = 0; vertex < inputGraph.getSize(); ++vertex) {
 			randomGraph.addVertex();
 			for (int degree = 0; degree < degreeSequenceVector.get(vertex);
 			     ++degree) {
@@ -112,7 +112,7 @@ final class RandomGraphGenerator {
 	private static List<Integer> getDegreeSequenceVector(Graph inputGraph)
 	{
 		List<Integer> degreeSequenceVector = new ArrayList<>();
-		for (int currentVertex = 0; currentVertex < inputGraph.size();
+		for (int currentVertex = 0; currentVertex < inputGraph.getSize();
 				++currentVertex) {
 			int degree = inputGraph.getAdjacencyList(currentVertex).size();
 			degreeSequenceVector.add(degree);
