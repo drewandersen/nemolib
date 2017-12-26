@@ -17,9 +17,9 @@ Use the `mvn package` command from the root directory to generate a jar file
 in the `target` subdirectory containing the nemolib library. Any classes 
 which implement nemolib should use the statement `import edu.uwb.nemolib;`.
 
-Example Programs
-----------------
-An example program can be found in the package `edu.uwb.nemolib_examples`. More will follow soon.
+Example Program
+---------------
+An example program can be found at github.com/drewandersen/nemoprofile.
 
 Documentation
 -------------
@@ -27,8 +27,9 @@ JavaDocs are auto-generated when Maven creates the project.
 
 Future Project Ideas
 --------------------
+* Parallelize random graph analysis (embarassingly parallel).
 * Complete parallelization using MPI.
 * Implement SubgraphCollect by adding subgraph induction functionality.
 * Implement the nauty algorithm in Java and include it as a dependency in nemolib. 
 * Research other graph/network parallelziation libraries and implement NemoProfile to compare.
-* Create thorough unit tests
+* Write unit tests.
